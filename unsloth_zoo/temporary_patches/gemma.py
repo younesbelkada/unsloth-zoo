@@ -162,7 +162,7 @@ def patch_Gemma3ForConditionalGeneration_causal_mask():
     except: return
     from transformers.models.gemma3.modeling_gemma3 import (
         StaticCache,
-        HybridCache,
+        Cache,
     )
     def _update_causal_mask(
         self,
@@ -186,7 +186,7 @@ def patch_Gemma3ForConditionalGeneration_causal_mask():
         inputs_lead_dim, sequence_length = input_tensor.shape[:2]
         if using_static_cache:
             target_length = past_key_values.get_max_cache_shape()
-        elif isinstance(past_key_values, HybridCache):
+        elif isinstance(past_key_values, Cache):
             target_length = past_key_values.get_max_cache_shape()
         else:
             target_length = (
